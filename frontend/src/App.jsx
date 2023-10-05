@@ -32,28 +32,28 @@ function App() {
       });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     switch (language) {
       case "c":
         setMode('java');
-        break;    
+        break;
       case "cpp":
         setMode('java');
-        break;    
+        break;
       case "py":
         setMode('python');
-        break;    
+        break;
       case "java":
         setMode('java');
-        break;    
+        break;
       case "cs":
         setMode('csharp');
-        break;    
+        break;
       default:
         setMode('python');
         break;
     }
-  },[language])
+  }, [language])
 
   // const handleKeyDown = (e) => {
   //   if (e.key === 'Enter') {
@@ -80,50 +80,50 @@ function App() {
   return (
     <div className="App" >
       <h1>Code Compiler</h1>
-    <div style={{'display':'flex'}}>
-    <div>
-      <AceEditor
-        mode = {mode}
-        theme='dracula'
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: true,
-          fontSize: 20,
-          showPrintMargin: false,
-        }}
-        onChange={(e) => setCode(e)}
-      />
+      <div style={{ 'display': 'flex' }}>
+        <div>
+          <AceEditor
+            mode={mode}
+            theme='dracula'
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              fontSize: 20,
+              showPrintMargin: false,
+            }}
+            onChange={(e) => setCode(e)}
+          />
+        </div>
+        <div>
+          <select onChange={(e) => setLanguage(e.target.value)} name='language'>
+            <option value="py">Python</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="cs">C#</option>
+            <option value="java">Java</option>
+            <option value="js">Javascript</option>
+            <option value="go">Golang</option>
+          </select>
+          <button onClick={handleCompile}>Compile</button><br />
+          <label htmlFor='code-input'>Input </label>
+          <textarea
+            id='code-input'
+            type='text'
+            placeholder='Enter input If required'
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+          <div>
+            <h2>Output:</h2>
+            <pre>{output}</pre>
+          </div>
+          <div>
+            <h2>Error:</h2>
+            <pre>{error}</pre>
+          </div>
+        </div>
       </div>
-      <div>
-      <select onChange={(e) => setLanguage(e.target.value)} name='language'>
-        <option value="py">Python</option>
-        <option value="c">C</option>
-        <option value="cpp">C++</option>
-        <option value="cs">C#</option>
-        <option value="java">Java</option>
-        <option value="js">Javascript</option>
-        <option value="go">Golang</option>
-      </select>
-      <button onClick={handleCompile}>Compile</button><br />
-      <label htmlFor='code-input'>Input </label>
-      <textarea
-       id='code-input' 
-       type='text' 
-       placeholder='Enter input If required' 
-       value={input}
-       onChange={(event) => setInput(event.target.value)}
-      />
-      <div>
-        <h2>Output:</h2>
-        <pre>{output}</pre>
-      </div>
-      <div>
-        <h2>Error:</h2>
-        <pre>{error}</pre>
-      </div>
-      </div>
-      </div>  
     </div>
   );
 }
