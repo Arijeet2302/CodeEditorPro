@@ -13,7 +13,22 @@ function App() {
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
   const [input, setInput] = useState('');
-  const [mode, setMode] = useState('python')
+  const [mode, setMode] = useState('python');
+  const [filename, setFileName] = useState("");
+  const [Files, SetFiles] = useState([]);
+
+  const showFiles = () =>{
+    axios.post("http://localhost:4000/user/files",{
+      username : "Arijeet Sinha"
+    })
+    .then((res)=>{
+      // console.log(res.data);
+      SetFiles(res.data);
+    })
+    .catch((e)=>{
+      console.log("Error Showing files: ",e);
+    })
+  }
 
   const handleCompile = () => {
 
@@ -55,27 +70,37 @@ function App() {
     }
   }, [language])
 
-  // const handleKeyDown = (e) => {
-  //   if (e.key === 'Enter') {
-  //     e.preventDefault(); // Prevent the default behavior (newline)
+  const handleFile = ()=>{
+    axios.post("http://localhost:4000/user/add",{
+      username : "Arijeet Sinha",
+      FileName : filename + "." + language,
+      Code : code,
+      Language : language
+    })
+    .then((res)=>{
+      alert(res.data.msg);
+      showFiles();
+    })
+    .catch((e)=>{
+      console.log("Error while adding file: ",e);
+    })
+  }
 
-  //     // Get the current line and its indentation
-  //     const cursorPosition = e.target.selectionStart;
-  //     const lines = code.split('\n');
-  //     const currentLine = lines[lines.length - 1];
-  //     const indentation = /^[ \t]*/.exec(currentLine)[0];
-
-  //     // Insert the same indentation on the new line
-  //     const newCode = code.substring(0, cursorPosition) + '\n' + indentation + code.substring(cursorPosition);
-  //     setCode(newCode);
-
-  //     // Move the cursor to the correct position
-  //     setTimeout(() => {
-  //       const newCursorPosition = cursorPosition + indentation.length + 1;
-  //       e.target.setSelectionRange(newCursorPosition, newCursorPosition);
-  //     }, 0);
-  //   }
-  // };
+  const handleFiledDelete = (filename) =>{
+    axios.delete("http://localhost:4000/user/delete",{
+      data : {
+        username : "Arijeet Sinha",
+        FileName : filename
+      }
+    })
+    .then((res)=>{
+      alert(res.data.msg);
+      showFiles();
+    })
+    .catch((e)=>{
+      console.log(("Error While adding data: ",e));
+    })
+  }
 
   return (
     <div className="App" >
@@ -92,6 +117,7 @@ function App() {
               fontSize: 20,
               showPrintMargin: false,
             }}
+            value={code}
             onChange={(e) => setCode(e)}
           />
         </div>
@@ -121,6 +147,26 @@ function App() {
           <div>
             <h2>Error:</h2>
             <pre>{error}</pre>
+          </div>
+          <div>
+            <input 
+              id="filename"
+              type='text'
+              placeholder='Enter File Name'
+              value={filename}
+              onChange={(event)=>setFileName(event.target.value)}
+            />
+            <button onClick={handleFile}>Save</button>
+          </div>
+          <div>
+            <div onClick={showFiles}>Show Files</div>
+            {Files.map((item)=>(
+              <div key={item._id}>
+                <div onClick={()=>setCode(item.Code)}>{item.FileName}
+                  <button onClick={()=>handleFiledDelete(item.FileName)}>delete</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
