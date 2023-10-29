@@ -16,6 +16,7 @@ function App() {
   const [mode, setMode] = useState('python');
   const [filename, setFileName] = useState("");
   const [Files, SetFiles] = useState([]);
+  const [currentFile, setCurrentFile] = useState("");
 
   const showFiles = () =>{
     axios.post("http://localhost:4000/user/files",{
@@ -102,11 +103,35 @@ function App() {
     })
   }
 
+  const handleCurrentFile =(current_code,file_name )=>{
+    setCode(current_code);
+    setCurrentFile(file_name);
+  }
+
+  const EditFile =()=>{
+    axios.post("http://localhost:4000/user/updateFile",{
+      username : "Arijeet Sinha",
+      FileName : currentFile,
+      Code : code,
+      Language : language
+    })
+    .then((res)=>{
+      alert(res.data.msg);
+    })
+    .catch((e)=>{
+      console.log("Errror while updateing file:",e);
+    })
+  }
+
   return (
     <div className="App" >
       <h1>Code Compiler</h1>
       <div style={{ 'display': 'flex' }}>
         <div>
+        <div id='headername'>
+        <h2>{currentFile}</h2>
+        { currentFile ? (<button onClick={EditFile}>Save Current File</button>):(<div></div>)}
+        </div>
           <AceEditor
             mode={mode}
             theme='dracula'
@@ -159,10 +184,10 @@ function App() {
             <button onClick={handleFile}>Save</button>
           </div>
           <div>
-            <div onClick={showFiles}>Show Files</div>
+            <div id="click-obj" onClick={showFiles}>Show Files</div>
             {Files.map((item)=>(
               <div key={item._id}>
-                <div onClick={()=>setCode(item.Code)}>{item.FileName}
+                <div id='click-obj' onClick={()=>handleCurrentFile(item.Code,item.FileName)}>{item.FileName}
                   <button onClick={()=>handleFiledDelete(item.FileName)}>delete</button>
                 </div>
               </div>

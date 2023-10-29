@@ -52,7 +52,35 @@ showFiles = async(req,res)=>{
     }
 }
 
+updateFile = async(req,res)=>{
+    const {username,FileName,Code,Language} = req.body;
+    
+    try{
+        const document = await FileSystem.findOneAndUpdate(
+            { $and : [
+                {username : { $eq : username}},
+                {FileName : { $eq : FileName}},
+                {Language : { $eq : Language}},
+            ]
+            },
+            { $set : { Code : Code}},
+            { returnOriginal : false},
+            );
+
+        if (document){
+            return res.send({msg : "File Saved!!"});
+        }else{
+            return res.send({msg : "File Not Found!!"}) 
+        }
+    }catch(err){
+        console.log("Error while updating document",err);
+        return res.send({msg:"Internal Server Error"});
+    }
+
+}
+
 router.post("/add", addFile);
 router.delete("/delete", deleteFile);
 router.post("/files", showFiles);
+router.post("/updateFile", updateFile);
 module.exports = router;

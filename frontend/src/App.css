@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+#click-obj{
+  cursor: pointer;
+}
+
+#headername{
+  display: flex;
+}
