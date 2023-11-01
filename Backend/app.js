@@ -12,7 +12,14 @@ const http = require('http');
 const app = express();
 const port = 4000;
 
-app.use(cors("*"));
+const allowedOrigins = ['http://localhost:5173', 'https://code-pro-one.vercel.app'];
+
+// Configure CORS with the allowed origins
+app.use(cors({
+  origin: allowedOrigins,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, 
+}));
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URL, {
