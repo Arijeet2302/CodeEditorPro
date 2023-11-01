@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const { exec } = require('child_process');
 const axios = require('axios');
 const qs = require('qs');
 const file = require("./FileOperations");
+const http = require('http');
 
 
 const app = express();
@@ -57,6 +57,8 @@ app.post('/compile', (req, res) => {
 
 app.use("/user", file);
 
-app.listen(port, () => {
+const server = http.createServer(app);
+
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
