@@ -73,7 +73,7 @@ const options = {
     'X-RapidAPI-Host': 'code-compiler.p.rapidapi.com'
   },
   data: {
-    LanguageChoice: languageCode , Program: code ,input : input
+    LanguageChoice: languageCode , Program: code , Input : input
   }
 };
 
