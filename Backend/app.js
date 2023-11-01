@@ -37,29 +37,52 @@ mongoose.connect(process.env.MONGO_URL, {
 // Define an API endpoint for code execution
 app.post('/compile', (req, res) => {
   const { code , language, input } = req.body;
+  var languageCode = '5';
 
-  var data = qs.stringify({
-    'code': code,
-    'language': language,
-    'input': input
-  });
-  var config = {
-      method: 'post',
-      url: 'https://api.codex.jaagrav.in',
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data : data
-  };
+  switch (language) {
+    case 'c':
+      languageCode = '6' 
+      break;
+    case 'cpp':
+      languageCode = '7' 
+      break;
+    case 'java':
+      languageCode = '4' 
+      break;
+    case 'cs':
+      languageCode = '1' 
+      break;
+    case 'js':
+      languageCode = '17' 
+      break;
+    case 'go':
+      languageCode = '20' 
+      break;
+  
+    default:
+      languageCode = '5'
+      break;
+  }
 
-  axios(config)
-  .then((response)=>{
-    res.send(response.data);
-  })
-  .catch((err)=>{
-    res.status(500).json({ error : err.message });
-  })
+const options = {
+  method: 'POST',
+  url: 'https://code-compiler.p.rapidapi.com/v2',
+  headers: {
+    'content-type': 'application/json',
+    'X-RapidAPI-Key': 'd816d3d66bmsh61000e59c1cf930p1f570ajsn9368d130bba2',
+    'X-RapidAPI-Host': 'code-compiler.p.rapidapi.com'
+  },
+  data: {
+    LanguageChoice: languageCode , Program: code ,input : input
+  }
+};
 
+axios.request(options).then(function (response) {
+  console.log(response.data);
+  return res.send(response.data);
+}).catch(function (error) {
+  console.error(error);
+});
 });
 
 app.use("/user", file);
