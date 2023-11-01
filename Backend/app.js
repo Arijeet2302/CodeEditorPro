@@ -12,7 +12,7 @@ const http = require('http');
 const app = express();
 const port = 4000;
 
-app.use(cors());
+app.use(cors("*"));
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URL, {
