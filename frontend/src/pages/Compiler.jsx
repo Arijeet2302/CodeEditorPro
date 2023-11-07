@@ -7,6 +7,7 @@ import "ace-builds/src-noconflict/mode-csharp";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-dracula";
+import "ace-builds/src-noconflict/ext-language_tools"
 import { DocumentPlusIcon, FolderOpenIcon, TrashIcon, FolderIcon, PlayIcon } from '@heroicons/react/24/outline'
 import LogoPython from '../components/LogoPython'
 import LogoJavaScript from '../components/LogoJavaScript'
@@ -119,6 +120,7 @@ function Compiler() {
       })
       .then((res)=>{
         alert(res.data.msg);
+        showFiles();
       })
       .catch((e)=>{
         console.log("Errror while updateing file:",e);
@@ -315,7 +317,7 @@ function Compiler() {
         <AceEditor
           mode={mode}
           theme='dracula'
-          // height='500px'
+          height='468px'
           width='full'
           setOptions={{
             enableBasicAutocompletion: true,
