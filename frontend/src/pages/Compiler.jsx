@@ -174,7 +174,8 @@ function Compiler() {
   }
 
   // setting selected filename and show corresponding code
-  const handleCurrentFile = (current_code, file_name) => {
+  const handleCurrentFile = (current_code, file_name, selected_language) => {
+    setLanguage(selected_language);
     setCode(current_code);
     setCurrentFile(file_name);
   }
@@ -257,7 +258,7 @@ function Compiler() {
                   {/* {console.log({ item, currentFile })} */}
                   <p
                     className='truncate cursor-pointer text-white hover:text-green-500'
-                    onClick={() => handleCurrentFile(item.Code, item.FileName)}
+                    onClick={() => handleCurrentFile(item.Code, item.FileName, item.Language)}
                   >{item.FileName}</p>
 
                   <button
