@@ -10,7 +10,7 @@ import "ace-builds/src-noconflict/mode-golang";
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/ext-language_tools"
-import { DocumentPlusIcon, TrashIcon, FolderIcon, PlayIcon, PlusIcon, } from '@heroicons/react/24/outline'
+import { DocumentPlusIcon, TrashIcon, FolderIcon, PlayIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { FolderIcon as SolidFolderIcon } from '@heroicons/react/24/solid'
 import LogoPython from '../components/LogoPython'
 import LogoJavaScript from '../components/LogoJavaScript'
@@ -85,11 +85,11 @@ function Compiler() {
   useEffect(() => {
     switch (language) {
       case "c":
-        setCode('');
+        setCode("");
         setMode('c_cpp');
         break;
       case "cpp":
-        setCode('');
+        setCode("");
         setMode('c_cpp');
         break;
       case "py":
@@ -101,6 +101,7 @@ function Compiler() {
         setMode('java');
         break;
       case "cs":
+        setCode("");
         setMode('csharp');
         break;
       case "js":
@@ -187,7 +188,7 @@ function Compiler() {
   }
 
   const [browserHeight, setBrowserHeight] = useState(window.innerHeight);
-  const navbarHeight = '53px';
+  const navbarHeight = '63px';
   const filenameHeight = '32px';
 
   useEffect(() => {
@@ -258,7 +259,7 @@ function Compiler() {
                   {/* {console.log({ item, currentFile })} */}
                   <p
                     className='truncate cursor-pointer text-white hover:text-green-500'
-                    onClick={() => handleCurrentFile(item.Code, item.FileName, item.Language)}
+                    onClick={() => handleCurrentFile(item.Code, item.FileName)}
                   >{item.FileName}</p>
 
                   <button
@@ -349,11 +350,12 @@ function Compiler() {
           {/* start - select_languages_sidebar */}
         </div>
         {/* end - sidebar */}
-        {/* start - codebox */}
+        {/* start - codearea */}
         <div className='basis-[55%]'>
-          <div className="w-full">
+          {/* start current filename */}
+          <div className="w-full h-[32px]">
             <div className="flex items-center bg-slate-800 w-30 h-8 text-white p-2 border-slate-800">
-              <p className='text-sm font-medium text-gray-500 '>Current Filename: </p>
+              <p className='text-sm font-medium text-gray-500'>Current Filename: </p>
               {currentFile === "Untitled" ? (
                 <span className='flex items-center justify-between px-2 text-sm font-medium text-green-500'>{currentFile}.{language}</span>
               ) : (
@@ -364,26 +366,31 @@ function Compiler() {
               </button> */}
             </div>
           </div>
-          {/* {console.log(`The value is: ${mainBodyHeightpx}`)};
+          {/* end current filename */}
+          {/* start codebox */}
+          <div className="w-full ">
+            {/* {console.log(`The value is: ${mainBodyHeightpx}`)};
           {console.log(`The type is: ${typeof (mainBodyHeightpx)}`)}; */}
-          <AceEditor
-            mode={mode}
-            theme='dracula'
-            //height='565px'
-            height={aceEditorHeight}
-            width='full'
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
-              fontSize: 20,
-              showPrintMargin: false,
-            }}
-            value={code}
-            onChange={(e) => setCode(e)}
-          />
+            <AceEditor
+              mode={mode}
+              theme='dracula'
+              //height='565px'
+              height={aceEditorHeight}
+              width='full'
+              setOptions={{
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                enableSnippets: true,
+                fontSize: 20,
+                showPrintMargin: false,
+              }}
+              value={code}
+              onChange={(e) => setCode(e)}
+            />
+            {/* start codebox */}
+          </div>
         </div>
-        {/* end - codebox */}
+        {/* end - codearea */}
         {/* start - resultbox */}
         <div className='w-full flex flex-col basis-[30%]'>
           {/* start - run_button */}
@@ -399,9 +406,9 @@ function Compiler() {
           </div>
           {/* end - run_button */}
           {/* start - mainresultbox */}
-          <div className='flex flex-col justify-between'>
+          <div style={{ height: mainBodyHeight - 40 }} className='flex flex-col justify-stretch'>
             {/* start - inputbox */}
-            <div className='p-2 border-2 border-t-0 border-gray-50 bg-slate-800' >
+            <div className='basis-[40%] p-2 border-2 border-t-0 border-gray-50 bg-slate-800' >
               <label htmlFor="inputbox" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Input Box</label>
               <textarea id="inputbox" className="block p-2 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300" placeholder="Enter input if required"
                 onChange={(e) => setInput(e.target.value)}
@@ -409,7 +416,7 @@ function Compiler() {
             </div>
             {/* end - inputbox */}
             {/* start - outputbox */}
-            <div className='p-2 border-2 border-t-0 border-gray-50 bg-slate-800'>
+            <div className='basis-[60%]  p-2 border-2 border-y-0 border-gray-50 bg-slate-800'>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Output Box</label>
               <p className="break-words block p-2 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300" placeholder="Your output . . .">
                 {output}
@@ -418,7 +425,7 @@ function Compiler() {
             {/* end - outputbox */}
             {/* start - errorbox */}
             {error ? (
-              <div className='p-2 border-2 border-t-0 border-gray-50 bg-slate-800 overflow-auto'>
+              <div className='p-2 border-2 border-b-0 border-gray-50 bg-slate-800 overflow-auto'>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Error Box</label>
                 <p className="break-words block p-2 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300" placeholder="Your error . . .">
                   {error}
