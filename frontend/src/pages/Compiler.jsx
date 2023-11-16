@@ -259,7 +259,7 @@ function Compiler() {
                   {/* {console.log({ item, currentFile })} */}
                   <p
                     className='truncate cursor-pointer text-white hover:text-green-500'
-                    onClick={() => handleCurrentFile(item.Code, item.FileName)}
+                    onClick={() => handleCurrentFile(item.Code, item.FileName, item.Language)}
                   >{item.FileName}</p>
 
                   <button
