@@ -25,14 +25,14 @@ function Compiler() {
 
   const username = useSelector((state) => state.auth.username);
   const userData = useSelector((state) => state.auth.userData);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(""); 
 
   useEffect(() => {
     if (username != undefined) {
       setUserName(username)
     } else {
-      setUserName(userData.userData.name);
-      // console.log(userData.userData.name);
+      setUserName(userData.name);
+      // console.log(userData.name);
     }
   }, [username, setUserName, userData])
 
