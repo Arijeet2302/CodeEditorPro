@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     status : false,
     userData: null,
-    username : ""
+    username : "",
+    userid : "",
 }
 
 // We will use this authSlice to check whether the user is authenticated or not
@@ -15,10 +16,13 @@ const authSlice = createSlice({
             state.status = true;
             state.userData = action.payload;
             state.username = action.payload.name;
+            state.userid = action.payload.$id;
         },
         logout: (state) => {
             state.status = false;
             state.userData = null;
+            state.username = "";
+            state.userid = "";
         }
      }
 })

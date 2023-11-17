@@ -3,11 +3,11 @@ const FileSystem = require("./models/FileSystem");
 
 
 addFile = async(req,res)=>{
-    const {username,FileName,Code,Language} = req.body;
+    const {userid,username,FileName,Code,Language} = req.body;
     
     const documents = await FileSystem.find(
         { $and : [
-            {username : { $eq : username}},
+            {userid : { $eq : userid}},
             {FileName : { $eq : FileName}},
             {Language : { $eq : Language}},
         ]
@@ -16,18 +16,17 @@ addFile = async(req,res)=>{
     if (documents.length != 0){
         return res.send({msg: "FileName Already Exists"});
     }else{
-        await FileSystem.create({username,FileName,Code,Language});
+        await FileSystem.create({userid,username,FileName,Code,Language});
         return res.send({msg : "File Saved"});
     }
 }
 
 deleteFile = async(req,res)=>{
     try{
-        const {username,FileName} = req.body;
-        console.log(username,FileName);
+        const {userid,FileName} = req.body;
         const deleteDocument = await FileSystem.findOneAndDelete(
             { $and : [
-                {username : { $eq : username}},
+                {userid : { $eq : userid}},
                 {FileName : { $eq : FileName}},
             ]
             });
@@ -44,8 +43,8 @@ deleteFile = async(req,res)=>{
 
 showFiles = async(req,res)=>{
     try{
-        const {username } = req.body;
-        const documents = await FileSystem.find({ username : { $eq : username}});
+        const {userid} = req.body;
+        const documents = await FileSystem.find({ userid : { $eq : userid}});
         return res.send(documents); 
     }catch(err){
         console.error("Error retrieving files", err);
@@ -53,12 +52,12 @@ showFiles = async(req,res)=>{
 }
 
 updateFile = async(req,res)=>{
-    const {username,FileName,Code,Language} = req.body;
+    const {userid,FileName,Code,Language} = req.body;
     
     try{
         const document = await FileSystem.findOneAndUpdate(
             { $and : [
-                {username : { $eq : username}},
+                {userid : { $eq : userid}},
                 {FileName : { $eq : FileName}},
                 {Language : { $eq : Language}},
             ]
