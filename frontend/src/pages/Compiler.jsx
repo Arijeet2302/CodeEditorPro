@@ -25,16 +25,20 @@ function Compiler() {
 
   const username = useSelector((state) => state.auth.username);
   const userData = useSelector((state) => state.auth.userData);
-  const [userName, setUserName] = useState(""); 
+  const userId = useSelector((state) => state.auth.userid);
+  const [userName, setUserName] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
 
   useEffect(() => {
     if (username != undefined) {
       setUserName(username)
+      setCurrentUserId(userId);
     } else {
-      setUserName(userData.name);
+      setUserName(userData.userData.name);
+      setCurrentUserId(userData.userData.$id);
       // console.log(userData.name);
     }
-  }, [username, setUserName, userData])
+  }, [username, setUserName, userData, userId])
 
   const [code, setCode] = useState('print("Hello World!!")');
   const [language, setLanguage] = useState('py');
@@ -71,10 +75,10 @@ function Compiler() {
 
   const showFiles = () => {
     axios.post("https://code-editor-pro-backend.vercel.app/user/files", {
-      username: userName
+      userid: currentUserId
     })
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         SetFiles(res.data);
       })
       .catch((e) => {
@@ -124,7 +128,7 @@ function Compiler() {
 
   const EditFile = () => {
     axios.post("https://code-editor-pro-backend.vercel.app/user/updateFile", {
-      username: userName,
+      userid: currentUserId,
       FileName: currentFile,
       Code: code,
       Language: language
@@ -141,6 +145,7 @@ function Compiler() {
   const handleFile = () => {
     if (currentFile === "Untitled") {
       axios.post("https://code-editor-pro-backend.vercel.app/user/add", {
+        userid: currentUserId,
         username: userName,
         FileName: filename + "." + language,
         Code: code,
@@ -161,7 +166,7 @@ function Compiler() {
   const handleFiledDelete = (filename) => {
     axios.delete("https://code-editor-pro-backend.vercel.app/user/delete", {
       data: {
-        username: userName,
+        userid : currentUserId,
         FileName: filename
       }
     })
